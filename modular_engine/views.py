@@ -1,44 +1,34 @@
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from rest_framework.decorators import action
-from django.core.management import call_command
+# module_engine/views.py
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from .models import Module
-from .serializers import ModuleSerializer
 
-class ModuleViewSet(viewsets.ModelViewSet):
-    queryset = Module.objects.all()
-    serializer_class = ModuleSerializer
+def module_list(request):
+    modules = Module.objects.all()
 
-    @action(detail=True, methods=["post"])
-    def install(self, request, pk=None):
-        module = self.get_object()
-        if module.is_installed:
-            return Response({"message": "Module already installed"}, status=status.HTTP_400_BAD_REQUEST)
+    if request.method == "POST":
+        module_name = request.POST.get('module_name')
+        action = request.POST.get('action')
 
-        module.is_installed = True
-        module.save()
-        call_command("migrate", "example_module")  # Run migrations for the module
-        return Response({"message": f"Module {module.name} installed successfully"})
+        try:
+            module = Module.objects.get(name=module_name)
 
-    @action(detail=True, methods=["post"])
-    def upgrade(self, request, pk=None):
-        module = self.get_object()
-        if not module.is_installed:
-            return Response({"message": "Module is not installed"}, status=status.HTTP_400_BAD_REQUEST)
+            if action == "install" and not module.is_installed:
+                module.install()
+                messages.success(request, f"Module '{module_name}' installed successfully!")
+            elif action == "uninstall" and module.is_installed:
+                module.uninstall()
+                messages.success(request, f"Module '{module_name}' uninstalled successfully!")
+            else:
+                messages.error(request, f"Module '{module_name}' is already in the desired state.")
+        except Module.DoesNotExist:
+            messages.error(request, "Module not found!")
 
-        # Auto-generate and apply migrations for the module
-        call_command("makemigrations", module.name)  # Generate migrations dynamically
-        call_command("migrate", module.name)  # Apply migrations
+        return redirect('module_list')
 
-        return Response({"message": f"Module {module.name} upgraded successfully"})
+    return render(request, 'modular_engine/list.html', {'modules': modules})
 
-
-    @action(detail=True, methods=["post"])
-    def uninstall(self, request, pk=None):
-        module = self.get_object()
-        if not module.is_installed:
-            return Response({"message": "Module is not installed"}, status=status.HTTP_400_BAD_REQUEST)
-
-        module.is_installed = False
-        module.save()
-        return Response({"message": f"Module {module.name} uninstalled successfully"})
+def dashboard(request):
+    # Fetch installed modules
+    modules = Module.objects.filter(is_installed=True)
+    return render(request, 'modular_engine/dashboard.html', {'modules': modules})

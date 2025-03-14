@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Module Management{% endblock %}
+
+{% block content %}
+<h1>Product</h1>
+<p>Here you can manage your Product.</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Populate this with your module data -->
+        {% for product in products %}
+        <tr>
+            <td>{{ product.name }}</td>
+            <td>
+                <a href="{% url 'product_update' product.id %}">Edit</a> |
+                <a href="{% url 'product_delete' product.id %}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'product_create' %}">Create New Product</a>
+{% endblock %}

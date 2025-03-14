@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ExampleModuleConfig(AppConfig):
+class UserManagementConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'example_module'
+    name = 'user_management'

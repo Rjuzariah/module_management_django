@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Module Management{% endblock %}
+
+{% block content %}
+<h1>Module Management</h1>
+<p>Here you can manage your modules.</p>
+
+<!-- Example table -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Module</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Populate this with your module data -->
+        {% for module in modules %}
+        <tr>
+            <td>{{ module.name }}</td>
+            <td>{{module.is_installed}}</td>
+            <td>
+                {% if not module.is_installed %}
+                    <button type="submit" class="btn btn-warning" name="action" value="install">Install</button>
+                {% else %}
+                    <button type="submit" class="btn btn-warning" name="action" value="uninstall">Uninstall</button>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

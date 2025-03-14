@@ -1,10 +1,8 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import ModuleViewSet
-
-router = DefaultRouter()
-router.register(r"modules", ModuleViewSet)
+# module_engine/urls.py
+from django.urls import path
+from . import views
 
 urlpatterns = [
-    path("", include(router.urls)),
+    path('', views.module_list, name='module_list'),
+    path('dashboard/', views.dashboard, name='dashboard'),
 ]

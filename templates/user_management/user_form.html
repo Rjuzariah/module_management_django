@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Module Management{% endblock %}
+
+{% block content %}
+<h1>Users</h1>
+<p>Here you can manage user.</p>
+<h1>{% if user %}Edit{% else %}Create{% endif %} User</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if user %}Update{% else %}Create{% endif %} User</button>
+    </form>
+
+    <br>
+    <a href="{% url 'user_list' %}">Back to User List</a>
+{% endblock %}
