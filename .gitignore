@@ -1,0 +1,6 @@
+/venv
+db.sqlite3
+/modular_engine/__pycache__
+/modular_system/__pycache__
+/example_module/__pycache__
+*.pyc
