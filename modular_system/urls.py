@@ -23,6 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('product/', include('product_module.urls')),
     path('module/', include('modular_engine.urls')),
-    path("api-auth/", include("rest_framework.urls")), 
     path('user_management/', include('user_management.urls')) 
 ]

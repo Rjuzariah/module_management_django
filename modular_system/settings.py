@@ -27,10 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# Define Additional_Modules Here
-MODULE_APPS = [
-    "product_module",  # Add other modules here as needed
-]
+import os
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
+
 
 # Application definition
 
@@ -41,12 +42,24 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "rest_framework",
+    "crispy_forms",
+    "crispy_bootstrap5",
     "modular_engine",
     "user_management",
-    "crispy_forms",
-    "crispy_bootstrap5"
-] + MODULE_APPS
+] 
+
+
+# OPTIONAL_APPS_FILE = os.path.join(os.path.dirname(__file__), "installed_apps.csv")
+
+# def get_installed_apps():
+#     """Load installed apps from CSV file."""
+#     if os.path.exists(OPTIONAL_APPS_FILE):
+#         with open(OPTIONAL_APPS_FILE, "r") as f:
+#             reader = csv.reader(f)
+#             return [row[0] for row in reader if row]  # Ensure no empty lines
+#     return []
+
+# INSTALLED_APPS = BASE_APPS + get_installed_apps()
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

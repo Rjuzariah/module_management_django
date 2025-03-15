@@ -3,43 +3,41 @@
 {% block title %}Module Dashboard{% endblock %}
 
 {% block content %}
+{% load static %}
 <div class="container mt-5">
     <h1 class="text-center mb-4">Module Dashboard</h1>
-    <div class="row">
+    <div class="row g-4">
         {% for module in modules %}
-            <div class="col-md-4 mb-4">
+        <div class="col-md-1 mb-5 mx-4"> <!-- mx-2 adds horizontal margin -->
+                <a style="text-decoration: none;" href="{% if module.name == 'product_module' %}{% url 'product_list' %}{% else %}#{% endif %}">
                 <div class="card">
-                    <img src="" class="card-img-top" alt="{{ module.name }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ module.name }}</h5>
-                        <p class="card-text">{{ module.description|default:"No description available." }}</p>
-                        <a href="{% if module.name == 'product_module' %}{% url 'product_list' %}{% else %}#{% endif %}" class="btn btn-primary">Go to {{ module.name }}</a>
-                    </div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMl_ysVJprBGdrfLC3z4tIrohkfWLC7IBNYA&s" class="card-img-top" alt="{{ module.name }}">
                 </div>
+                <p class="text-muted small text-center mt-1">{{ module.name }}</p>
+
+                </a>
             </div>
-        {% empty %}
-            <p>No modules installed yet.</p>
         {% endfor %}
-        <div class="col-md-4 mb-4">
+        <div class="col-md-1 mb-5 mx-4">
+            <a style="text-decoration: none;" href="{% url 'user_list' %}">
             <div class="card">
-                <img src="" class="card-img-top" alt="User Management">
-                <div class="card-body">
-                    <h5 class="card-title">User Management</h5>
-                    <p class="card-text">{{ module.description|default:"No description available." }}</p>
-                    <a href="{% url 'user_list' %}" class="btn btn-primary">Go to {{ module.name }}</a>
-                </div>
+                <img src="{% static 'icons/user_icon.png' %}" class="card-img-top" alt="User Management">
             </div>
+            <p class="text-muted small text-center mt-1">User</p>
+
+            </a>
         </div>
-        <div class="col-md-4 mb-4">
+        <div class="col-md-1 mb-5 mx-4">
+            <a style="text-decoration: none;" href="{% url 'module_list' %}">
             <div class="card">
-                <img src="" class="card-img-top" alt="App Management">
-                <div class="card-body">
-                    <h5 class="card-title">App Management</h5>
-                    <p class="card-text">{{ module.description|default:"No description available." }}</p>
-                    <a href="{% url 'module_list' %}" class="btn btn-primary">Go to {{ module.name }}</a>
-                </div>
+                <img src="{% static 'icons/apps_icon.png' %}" class="card-img-top" alt="App Management">
             </div>
+            <p class="text-muted small text-center mt-1">Apps</p>
+
+            </a>
         </div>
+        
     </div>
 </div>
 {% endblock %}
+
