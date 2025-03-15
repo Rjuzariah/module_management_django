@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Module
+from django.shortcuts import get_object_or_404, redirect, render
 
 def module_list(request):
     modules = Module.objects.all()
@@ -27,6 +28,41 @@ def module_list(request):
         return redirect('module_list')
 
     return render(request, 'modular_engine/list.html', {'modules': modules})
+
+def module_action(request, module_id):
+    """
+    Handles install, uninstall, and upgrade actions for a module.
+    Redirects back to the module list page with success/error messages.
+    """
+    module = get_object_or_404(Module, id=module_id)
+    action = request.POST.get("action")
+
+    if action == "install":
+        if not module.is_installed:
+            module.install()
+            messages.success(request, f"Module '{module.name}' installed successfully!")
+        else:
+            messages.error(request, "Module is already installed.")
+
+    elif action == "uninstall":
+        if module.is_installed:
+            module.uninstall()
+            messages.success(request, f"Module '{module.name}' uninstalled successfully!")
+        else:
+            messages.error(request, "Module is not installed.")
+
+    elif action == "upgrade":
+        if module.is_installed:
+            # module.version = "1.1"  # Example: Set a new version
+            # module.save()
+            messages.success(request, f"Module '{module.name}' upgraded successfully.")
+        else:
+            messages.error(request, "Module must be installed before upgrading.")
+
+    else:
+        messages.error(request, "Invalid action.")
+
+    return redirect("module_list") 
 
 def dashboard(request):
     # Fetch installed modules

@@ -22,11 +22,15 @@
             <td>{{ module.name }}</td>
             <td>{{module.is_installed}}</td>
             <td>
-                {% if not module.is_installed %}
-                    <button type="submit" class="btn btn-warning" name="action" value="install">Install</button>
-                {% else %}
-                    <button type="submit" class="btn btn-warning" name="action" value="uninstall">Uninstall</button>
-                {% endif %}
+                <form method="post" action="{% url 'module_action' module.id %}">
+                    {% csrf_token %}
+                    {% if not module.is_installed %}
+                        <button type="submit" class="btn btn-info" name="action" value="install">Install</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-info" name="action" value="upgrade">Upgrade</button>
+                        <button type="submit" class="btn btn-light" name="action" value="uninstall">Uninstall</button>
+                    {% endif %}
+                </form>
             </td>
         </tr>
         {% endfor %}

@@ -5,4 +5,5 @@ from . import views
 urlpatterns = [
     path('', views.module_list, name='module_list'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    path("module/<int:module_id>/action/", views.module_action, name="module_action"),
 ]
