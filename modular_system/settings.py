@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-d(#@-^c+wp0l0_&=0kk8nos+ey7i9idwq)gt3l51w!58*h%*85
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["djangomodularsystem-production.up.railway.app", "127.0.0.1", "localhost"]
+
 
 import os
 STATIC_URL = '/static/'
