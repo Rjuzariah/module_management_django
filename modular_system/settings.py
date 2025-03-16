@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-d(#@-^c+wp0l0_&=0kk8nos+ey7i9idwq)gt3l51w!58*h%*85
 DEBUG = True
 
 ALLOWED_HOSTS = ["djangomodularsystem-production.up.railway.app", "127.0.0.1", "localhost"]
+CSRF_TRUSTED_ORIGINS = ["https://djangomodularsystem-production.up.railway.app"]
 
 
 import os
