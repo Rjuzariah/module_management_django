@@ -91,6 +91,27 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+import dj_database_url
+import environ
+
+# Initialize environment variables
+env = environ.Env()
+
+# Read the .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+# Assign ENVIRONMENT and POSTGRES_LOCALLY properly
+ENVIRONMENT = env('ENVIRONMENT')
+POSTGRES_LOCALLY = False
+
+print(f"ENVIRONMENT: {ENVIRONMENT}")
+print(f"POSTGRES_LOCALLY: {POSTGRES_LOCALLY}")
+
+if ENVIRONMENT == "production" or POSTGRES_LOCALLY == True:
+    print("Using local Postgres database.")
+    print("DATABASE_URL: ", env("DATABASE_URL"))
+    DATABASES['default'] = dj_database_url.parse(env("DATABASE_URL"))
+    print(DATABASES['default'])
 
 
 # Password validation
