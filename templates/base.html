@@ -40,7 +40,7 @@
                 </li>
 
                 <li class="nav-link {% if request.resolver_match.url_name == 'user_logout' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'user_logout' %}">Logout</a>
+                    <a class="nav-link" href="{% url 'user_logout' %}">Logout ({{user.username | title }})</a>
                 </li>
                 {% else %}
                 <li class="nav-link {% if request.resolver_match.url_name == 'user_login' %}active{% endif %}">

@@ -53,8 +53,7 @@ def module_action(request, module_id):
 
     elif action == "upgrade":
         if module.is_installed:
-            # module.version = "1.1"  # Example: Set a new version
-            # module.save()
+            module.upgrade()
             messages.success(request, f"Module '{module.name}' upgraded successfully.")
         else:
             messages.error(request, "Module must be installed before upgrading.")

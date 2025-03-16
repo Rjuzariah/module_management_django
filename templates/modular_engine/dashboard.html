@@ -5,13 +5,13 @@
 {% block content %}
 {% load static %}
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Module Dashboard</h1>
+    <h1 class="text-center mb-5">Module Dashboard</h1>
     <div class="row g-4">
         {% for module in modules %}
         <div class="col-md-1 mb-5 mx-4"> <!-- mx-2 adds horizontal margin -->
                 <a style="text-decoration: none;" href="{% if module.name == 'product_module' %}{% url 'product_list' %}{% else %}#{% endif %}">
                 <div class="card">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMl_ysVJprBGdrfLC3z4tIrohkfWLC7IBNYA&s" class="card-img-top" alt="{{ module.name }}">
+                    <img src="{% static module.icon %}" class="card-img-top" alt="{{ module.name }}">
                 </div>
                 <p class="text-muted small text-center mt-1">{{ module.verbose_name }}</p>
 
