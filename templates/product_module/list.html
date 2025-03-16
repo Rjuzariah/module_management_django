@@ -18,12 +18,17 @@
         <tr>
             <td>{{ product.name }}</td>
             <td>
-                <a href="{% url 'product_update' product.id %}">Edit</a> |
+                {% if perms.product_module.change_product %}
+                <a href="{% url 'product_update' product.id %}">Edit</a> 
+                {% elif perms.product_module.delete_product %}
                 <a href="{% url 'product_delete' product.id %}">Delete</a>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+{% if perms.product_module.delete_product %}
 <a href="{% url 'product_create' %}">Create New Product</a>
+{% endif %}
 {% endblock %}

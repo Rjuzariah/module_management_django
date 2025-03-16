@@ -46,20 +46,8 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "modular_engine",
     "user_management",
+    "product_module",
 ] 
-
-
-# OPTIONAL_APPS_FILE = os.path.join(os.path.dirname(__file__), "installed_apps.csv")
-
-# def get_installed_apps():
-#     """Load installed apps from CSV file."""
-#     if os.path.exists(OPTIONAL_APPS_FILE):
-#         with open(OPTIONAL_APPS_FILE, "r") as f:
-#             reader = csv.reader(f)
-#             return [row[0] for row in reader if row]  # Ensure no empty lines
-#     return []
-
-# INSTALLED_APPS = BASE_APPS + get_installed_apps()
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

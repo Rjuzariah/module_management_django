@@ -10,7 +10,7 @@ from .forms import UserForm, LoginForm
 # List users
 def user_list(request):
     users = User.objects.all()
-    return render(request, 'user_management/list.html', {'users': users})
+    return render(request, 'user_management/list.html', {'user_datas': users})
 
 # Create a user
 def user_create(request):
@@ -35,7 +35,7 @@ def user_edit(request, user_id):
             return redirect('user_list')
     else:
         form = UserForm(instance=user)
-    return render(request, 'user_management/user_form.html', {'form': form, 'user': user})
+    return render(request, 'user_management/user_form.html', {'form': form, 'user_data': user})
 
 # Delete a user
 def user_delete(request, user_id):
@@ -44,7 +44,7 @@ def user_delete(request, user_id):
         user.delete()
         messages.success(request, 'User deleted successfully!')
         return redirect('user_list')
-    return render(request, 'user_management/confirm_delete.html', {'user': user})
+    return render(request, 'user_management/confirm_delete.html', {'user_data': user})
 
 
 def user_login(request):

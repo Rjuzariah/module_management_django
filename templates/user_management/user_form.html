@@ -2,15 +2,16 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<h2 class="mb-4">{% if user %}Edit{% else %}Create{% endif %} User</h2>
+<h2 class="mb-4">{% if user_data %}Edit{% else %}Create{% endif %} User</h2>
     
 <form method="post">
+    <span>{{user_data}}</span>
     {% csrf_token %}
     
     {{ form|crispy }}
 
     <button type="submit" class="btn btn-primary">
-        {% if user %}Update{% else %}Create{% endif %} User
+        {% if user_data %}Update{% else %}Create{% endif %} User
     </button>
 </form>
     <br>

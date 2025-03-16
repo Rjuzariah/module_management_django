@@ -9,7 +9,7 @@ OPTIONAL_APPS_FILE = os.path.join(settings.BASE_DIR, "installed_apps.csv")
 
 class Module(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    name_display = models.CharField(max_length=255, unique=True)
+    verbose_name = models.CharField(max_length=255, unique=True)
     icon = models.CharField(max_length=255, default="icons/default_icon.png")  
     is_installed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

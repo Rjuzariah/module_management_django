@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
     <h1>Confirm Delete</h1>
-    <p>Are you sure you want to delete "{{ user.username }}"?</p>
+    <p>Are you sure you want to delete "{{ user_data.username }}"?</p>
     <form method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-warning">Yes, delete</button>
