@@ -1,6 +1,5 @@
 {
-    "build": {
-      "dockerfile": "Dockerfile"
-    }
+  "build": {
+    "dockerfilePath": "./Dockerfile"
   }
-  
+}
