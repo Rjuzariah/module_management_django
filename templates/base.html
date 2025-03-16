@@ -18,6 +18,20 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .logout-link {
+            background: none;
+            border: none;
+            color: white;  /* Link color */
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .logout-link:hover {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 
@@ -40,7 +54,10 @@
                 </li>
 
                 <li class="nav-link {% if request.resolver_match.url_name == 'user_logout' %}active{% endif %}">
-                    <a class="nav-link" href="{% url 'user_logout' %}">Logout ({{user.username | title }})</a>
+                    <form action="{% url 'user_logout' %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link logout-link nav-link">Logout ({{user.username | title }})</button>
+                    </form>
                 </li>
                 {% else %}
                 <li class="nav-link {% if request.resolver_match.url_name == 'user_login' %}active{% endif %}">

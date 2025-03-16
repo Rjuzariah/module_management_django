@@ -107,9 +107,6 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 ENVIRONMENT = env('ENVIRONMENT')
 POSTGRES_LOCALLY = False
 
-print(f"ENVIRONMENT: {ENVIRONMENT}")
-print(f"POSTGRES_LOCALLY: {POSTGRES_LOCALLY}")
-
 if ENVIRONMENT == "production" or POSTGRES_LOCALLY == True:
     print("Using local Postgres database.")
     print("DATABASE_URL: ", env("DATABASE_URL"))

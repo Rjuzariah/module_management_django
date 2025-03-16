@@ -1,13 +1,22 @@
 # module_engine/views.py
-from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Module
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import ListView, View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Module
+from user_management.utils import CustomLoginRequiredMixin
 
-def module_list(request):
-    modules = Module.objects.all()
 
-    if request.method == "POST":
+class ModuleListView(CustomLoginRequiredMixin, ListView):
+    model = Module
+    template_name = 'modular_engine/list.html'
+    permission_required = 'modular_engine.view_module'
+    context_object_name = 'modules'
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles the install/uninstall actions from the POST request.
+        """
         module_name = request.POST.get('module_name')
         action = request.POST.get('action')
 
@@ -27,43 +36,49 @@ def module_list(request):
 
         return redirect('module_list')
 
-    return render(request, 'modular_engine/list.html', {'modules': modules})
-
-def module_action(request, module_id):
+class ModuleActionView(CustomLoginRequiredMixin, View):
+    permission_required = 'modular_engine.change_module'
     """
-    Handles install, uninstall, and upgrade actions for a module.
+    Handles the install, uninstall, and upgrade actions for a module.
     Redirects back to the module list page with success/error messages.
     """
-    module = get_object_or_404(Module, id=module_id)
-    action = request.POST.get("action")
+    def post(self, request, module_id):
+        module = get_object_or_404(Module, id=module_id)
+        action = request.POST.get("action")
 
-    if action == "install":
-        if not module.is_installed:
-            module.install()
-            messages.success(request, f"Module '{module.name}' installed successfully!")
+        if action == "install":
+            if not module.is_installed:
+                module.install()
+                messages.success(request, f"Module '{module.name}' installed successfully!")
+            else:
+                messages.error(request, "Module is already installed.")
+
+        elif action == "uninstall":
+            if module.is_installed:
+                module.uninstall()
+                messages.success(request, f"Module '{module.name}' uninstalled successfully!")
+            else:
+                messages.error(request, "Module is not installed.")
+
+        elif action == "upgrade":
+            if module.is_installed:
+                module.upgrade()
+                messages.success(request, f"Module '{module.name}' upgraded successfully.")
+            else:
+                messages.error(request, "Module must be installed before upgrading.")
+
         else:
-            messages.error(request, "Module is already installed.")
+            messages.error(request, "Invalid action.")
 
-    elif action == "uninstall":
-        if module.is_installed:
-            module.uninstall()
-            messages.success(request, f"Module '{module.name}' uninstalled successfully!")
-        else:
-            messages.error(request, "Module is not installed.")
+        return redirect("module_list")
 
-    elif action == "upgrade":
-        if module.is_installed:
-            module.upgrade()
-            messages.success(request, f"Module '{module.name}' upgraded successfully.")
-        else:
-            messages.error(request, "Module must be installed before upgrading.")
-
-    else:
-        messages.error(request, "Invalid action.")
-
-    return redirect("module_list") 
-
-def dashboard(request):
-    # Fetch installed modules
-    modules = Module.objects.filter(is_installed=True)
-    return render(request, 'modular_engine/dashboard.html', {'modules': modules})
+class DashboardView(CustomLoginRequiredMixin, View):
+    """
+    Displays the dashboard page with installed modules.
+    Only visible to admin or manager users.
+    """
+    def get(self, request, *args, **kwargs):
+        # Fetch installed modules
+        modules = Module.objects.filter(is_installed=True)
+        is_manager_or_admin = request.user.is_staff or request.user.groups.filter(name="manager").exists()
+        return render(request, 'modular_engine/dashboard.html', {'modules': modules, 'is_manager_or_admin': is_manager_or_admin})

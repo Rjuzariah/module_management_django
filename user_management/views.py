@@ -1,68 +1,93 @@
-# views.py
-from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User, Group
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.contrib.auth.views import LoginView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from .forms import UserForm
+from user_management.utils import CustomPermissionRequiredMixin
+# from .forms import LoginForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.views.generic import FormView
+from django.contrib import messages
 
-from .forms import UserForm, LoginForm
-# List users
-def user_list(request):
-    users = User.objects.all()
-    return render(request, 'user_management/list.html', {'user_datas': users})
+# User List View
+class UserListView(CustomPermissionRequiredMixin, ListView):
+    model = User
+    template_name = 'user_management/list.html'
+    context_object_name = 'user_datas'
+    permission_required = 'auth.view_user'
 
-# Create a user
-def user_create(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'User created successfully!')
-            return redirect('user_list')
-    else:
-        form = UserCreationForm()
-    return render(request, 'user_management/user_form.html', {'form': form})
+# User Create View
+class UserCreateView(CustomPermissionRequiredMixin, CreateView):
+    form_class = UserCreationForm
+    template_name = 'user_management/user_form.html'
+    permission_required = 'auth.add_user'
+    success_url = '/user_management/users/'
 
-# Edit a user
-def user_edit(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    if request.method == 'POST':
-        form = UserForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'User updated successfully!')
-            return redirect('user_list')
-    else:
-        form = UserForm(instance=user)
-    return render(request, 'user_management/user_form.html', {'form': form, 'user_data': user})
+# User Edit View
+class UserEditView(UpdateView):
+    model = User
+    template_name = 'user_management/user_form.html'
+    form_class = UserForm
+    success_url = '/user_management/users/'
 
-# Delete a user
-def user_delete(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    if request.method == 'POST':
-        user.delete()
-        messages.success(request, 'User deleted successfully!')
-        return redirect('user_list')
-    return render(request, 'user_management/confirm_delete.html', {'user_data': user})
+    def get_object(self, queryset=None):
+        # Ensure we're editing the correct user and not modifying the logged-in user
+        return get_object_or_404(User, pk=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        # Call the parent method to get the default context data
+        context = super().get_context_data(**kwargs)
+        # Add the user being edited as 'user_data'
+        context['user'] = self.request.user
+        context['user_data'] = self.get_object()  # This gets the user being edited
+        return context
 
 
-def user_login(request):
-    form = LoginForm()
-    if request.method == "POST":
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect("dashboard")  # Change this to your desired redirect page
-            else:
-                form.add_error(None, "Invalid username or password.")
-    
-    return render(request, "user_management/login.html", {"form": form})
+# User Delete View
+class UserDeleteView(CustomPermissionRequiredMixin, DeleteView):
+    model = User
+    template_name = 'user_management/confirm_delete.html'
+    permission_required = 'auth.delete_user'
+    success_url = '/user_management/users/'
 
-def user_logout(request):
-    logout(request)
-    return redirect("user_login")
+    def get_object(self, queryset=None):
+        # Ensure we're editing the correct user and not modifying the logged-in user
+        return get_object_or_404(User, pk=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        # Call the parent method to get the default context data
+        context = super().get_context_data(**kwargs)
+        # Add the user being edited as 'user_data'
+        context['user'] = self.request.user
+        context['user_data'] = self.get_object()  # This gets the user being edited
+        return context
+
+class UserLoginView(FormView):
+    form_class = AuthenticationForm
+    template_name = 'user_management/login.html'
+    success_url = '/module/dashboard'  # Replace with the actual redirect URL after login
+
+    def get_form_kwargs(self):
+        # Pass the request to the form kwargs
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request  # Attach the request to the form
+        return kwargs
+
+    def form_valid(self, form):
+        # Authenticate and log the user in
+        username = form.cleaned_data.get("username")
+        password = form.cleaned_data.get("password")
+        user = authenticate(self.request, username=username, password=password)
+        if user is not None:
+            login(self.request, user)
+            return super().form_valid(form)
+        else:
+            form.add_error(None, "Invalid username or password.")
+            return self.form_invalid(form)
+
+from django.contrib.auth.views import LogoutView
+
+class UserLogoutView(LogoutView):
+    next_page = 'user_login'  # Redirect to the login page after logout

@@ -18,24 +18,27 @@
                 </a>
             </div>
         {% endfor %}
-        <div class="col-md-1 mb-5 mx-4">
-            <a style="text-decoration: none;" href="{% url 'user_list' %}">
-            <div class="card">
-                <img src="{% static 'icons/user_icon.png' %}" class="card-img-top" alt="User Management">
-            </div>
-            <p class="text-muted small text-center mt-1">User</p>
 
-            </a>
-        </div>
-        <div class="col-md-1 mb-5 mx-4">
-            <a style="text-decoration: none;" href="{% url 'module_list' %}">
-            <div class="card">
-                <img src="{% static 'icons/apps_icon.png' %}" class="card-img-top" alt="App Management">
-            </div>
-            <p class="text-muted small text-center mt-1">Apps</p>
+        {% if is_manager_or_admin %}
+            <div class="col-md-1 mb-5 mx-4">
+                <a style="text-decoration: none;" href="{% url 'user_list' %}">
+                <div class="card">
+                    <img src="{% static 'icons/user_icon.png' %}" class="card-img-top" alt="User Management">
+                </div>
+                <p class="text-muted small text-center mt-1">User</p>
 
-            </a>
-        </div>
+                </a>
+            </div>
+            <div class="col-md-1 mb-5 mx-4">
+                <a style="text-decoration: none;" href="{% url 'module_list' %}">
+                <div class="card">
+                    <img src="{% static 'icons/apps_icon.png' %}" class="card-img-top" alt="App Management">
+                </div>
+                <p class="text-muted small text-center mt-1">Apps</p>
+
+                </a>
+            </div>
+        {% endif %}
         
     </div>
 </div>

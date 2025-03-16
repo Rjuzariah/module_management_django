@@ -20,8 +20,10 @@
             <td>
                 {% if perms.product_module.change_product %}
                 <a href="{% url 'product_update' product.id %}">Edit</a> 
-                {% elif perms.product_module.delete_product %}
-                <a href="{% url 'product_delete' product.id %}">Delete</a>
+                {% endif %}
+
+                {% if perms.product_module.delete_product %}
+                | <a href="{% url 'product_delete' product.id %}">Delete</a>
                 {% endif %}
             </td>
         </tr>

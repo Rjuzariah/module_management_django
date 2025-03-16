@@ -1,9 +1,9 @@
-# module_engine/urls.py
+# urls.py
 from django.urls import path
-from . import views
+from .views import ModuleListView, ModuleActionView, DashboardView
 
 urlpatterns = [
-    path('', views.module_list, name='module_list'),
-    path('dashboard/', views.dashboard, name='dashboard'),
-    path("module/<int:module_id>/action/", views.module_action, name="module_action"),
+    path('', ModuleListView.as_view(), name='module_list'),
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
+    path('module/<int:module_id>/action/', ModuleActionView.as_view(), name='module_action'),
 ]
