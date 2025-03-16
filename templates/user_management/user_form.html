@@ -5,7 +5,6 @@
 <h2 class="mb-4">{% if user_data %}Edit{% else %}Create{% endif %} User</h2>
     
 <form method="post">
-    <span>{{user_data}}</span>
     {% csrf_token %}
     
     {{ form|crispy }}
