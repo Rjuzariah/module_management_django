@@ -43,6 +43,15 @@ class UserEditView(UpdateView):
         context['user'] = self.request.user
         context['user_data'] = self.get_object()  # This gets the user being edited
         return context
+    
+    def form_valid(self, form):
+        # Save the form but don't overwrite the password if it's left blank
+        user = form.save(commit=False)
+        if form.cleaned_data['password']:
+            user.set_password(form.cleaned_data['password'])
+        user.save()
+        messages.success(self.request, "User updated successfully.")
+        return redirect('user_list')
 
 
 # User Delete View

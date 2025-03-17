@@ -31,6 +31,28 @@
             text-decoration: none;
             color: white;
         }
+        .alert {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+            animation: fadeOut 10s forwards;
+        }
+
+        /* Keyframes for fade-out effect */
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -74,6 +96,13 @@
     {% block content %}
     <!-- Child templates will insert content here -->
     {% endblock %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
 </div>
 
 <!-- Footer -->

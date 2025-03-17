@@ -65,10 +65,6 @@ class Module(models.Model):
     def uninstall(self):
 
         print(f"Uninstalling module: {self.name}")
-
-        print(f"Cleaning up table for: {self.name}")
-        call_command("migrate")
-
         # Simulate uninstalling the module
         self.is_installed = False
         self.save()
