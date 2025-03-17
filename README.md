@@ -23,7 +23,7 @@ source venv/bin/activate   # macOS/Linux
 venv\Scripts\activate      # Windows
 ````
 
-## 4. Install Dependencies
+## 2. Install Dependencies
 
 Once your virtual environment is set up, install all the required dependencies for the project using `pip`. This will ensure you have all the necessary packages for the project to run smoothly.
 
@@ -33,7 +33,7 @@ Run the following command to install dependencies:
 pip install -r requirements.txt
 ````
 
-## 5. Database Migrations
+## 3. Database Migrations
 
 Run this following command if you have new update to the model
 ````bash
@@ -45,7 +45,7 @@ To apply migrations and create the necessary tables in your database:
 python manage.py migrate
 ````
 
-## 6.Run the Development Server
+## 4.Run the Development Server
 To run the Django development server, use the following command:
 ````bash
 python manage.py runserver
