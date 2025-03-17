@@ -109,9 +109,7 @@ POSTGRES_LOCALLY = False
 
 if ENVIRONMENT == "production" or POSTGRES_LOCALLY == True:
     print("Using local Postgres database.")
-    print("DATABASE_URL: ", env("DATABASE_URL"))
     DATABASES['default'] = dj_database_url.parse(env("DATABASE_URL"))
-    print(DATABASES['default'])
 
 
 # Password validation

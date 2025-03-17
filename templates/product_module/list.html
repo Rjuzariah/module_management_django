@@ -8,7 +8,11 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Product Name</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Barcode</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -17,6 +21,10 @@
         {% for product in products %}
         <tr>
             <td>{{ product.name }}</td>
+            <td>{{ product.product_category }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.stock }}</td>
+            <td>{{ product.barcode }}</td>
             <td>
                 {% if perms.product_module.change_product %}
                 <a href="{% url 'product_update' product.id %}">Edit</a> 
